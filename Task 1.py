@@ -24,7 +24,7 @@ while True:
             print("Please enter a number between 1 and 24 (inclusive)")
     # If there is an error in converting, the user will be asked to try again
     except ValueError:
-        print("Please input a number")
+        print("Please enter a number between 1 and 24 (inclusive)")
 
 # Uses the users input to decide how many passwords to make.
 
