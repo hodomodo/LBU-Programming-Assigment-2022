@@ -1,31 +1,39 @@
-import fileinput
 import enchant
+import sys
+import os.path
 
-e = enchant.Dict("en_UK")
+
+checker = enchant.Dict("en_UK")
 
 alphabet = "nopqrstuvwxyzabcdefghijklm"
 
-for f in fileinput.input():
-    def decrypt(text):
-        text = text.lower()
+decrypted_list = []
 
-        result = ''
 
-        for char in text:
-            if char.isalpha():
-                result += alphabet[(alphabet.index(char) - 14) % 26]
+def decrypt(text):
+    text = text.lower()
 
-            else:
-                result += char
+    result = ''
 
-        return result
+    for char in text:
+        if char.isalpha():
+            result += alphabet[(alphabet.index(char) - 14) % 26]
 
-decryption_check = e.check(f)
-print(f)
-print(decryption_check)
+        else:
+            result += char
 
-if decryption_check is True:
-    print(decrypt(f))
-elif decryption_check is False:
-    print("Cannot decrypt. Most likely not a Caesar Cypher at work here")
+    return result
 
+
+if len(sys.argv) > 1:
+    if os.path.exists(sys.argv[1]):
+        with open(sys.argv[1], "r") as f:
+            for line in f:
+                decryption = decrypt(line)
+                decrypted_list = ",".join(decrypt(line)).replace(",", "").split(" ")
+                check_1 = decrypted_list[0]
+                if checker.check(check_1) == False:
+                    print("Most likely not a caesar cypher at work here")
+                    quit()
+                elif checker.check(check_1) == True:
+                    print(decryption, end="")
