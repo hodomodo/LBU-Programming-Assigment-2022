@@ -2,7 +2,6 @@ import enchant
 import sys
 import os.path
 
-
 checker = enchant.Dict("en_UK")
 
 alphabet = "nopqrstuvwxyzabcdefghijklm"
@@ -31,9 +30,12 @@ if len(sys.argv) > 1:
             for line in f:
                 decryption = decrypt(line)
                 decrypted_list = ",".join(decrypt(line)).replace(",", "").split(" ")
+                decrypted_list = [s.replace('"', "") for s in decrypted_list]
                 check_1 = decrypted_list[0]
-                if checker.check(check_1) == False:
+                decryption_1 = " ".join(decrypted_list)
+                print(checker.check(check_1))
+                if checker.check(check_1) == True or "\n" or '"' in check_1:
+                    print(decryption_1, end="")
+                elif checker.check(check_1) == False or "\n" not in check_1:
                     print("Most likely not a caesar cypher at work here")
                     quit()
-                elif checker.check(check_1) == True:
-                    print(decryption, end="")
